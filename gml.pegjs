@@ -1,4 +1,9 @@
 /*
+ * Modifed from https://github.com/pegjs/pegjs/blob/0c39f1cf86d73c85a1f832e6cfddf4176f9e58bc/examples/javascript.pegjs
+ * By Thomas Hickman 2016
+*/
+
+/*
  * JavaScript Grammar
  * ==================
  *
@@ -197,15 +202,19 @@ Keyword
   / DefaultToken
   / DoToken
   / ElseToken
+  / EnumToken
+  / ExitToken
   / FinallyToken
   / ForToken
+  / GlobalVarToken
   / IfToken
   / ReturnToken
+  / RepeatToken
   / SwitchToken
+  / UntilToken
   / VarToken
   / WhileToken
   / WithToken
-  / EnumToken
 
 Literal
   = BooleanLiteral
@@ -346,14 +355,18 @@ DefaultToken    = "default"    !IdentifierPart
 DeleteToken     = "delete"     !IdentifierPart
 DoToken         = "do"         !IdentifierPart
 ElseToken       = "else"       !IdentifierPart
+ExitToken       = "exit"       !IdentifierPart
 EnumToken       = "enum"       !IdentifierPart
 FalseToken      = "false"      !IdentifierPart
 FinallyToken    = "finally"    !IdentifierPart
+GlobalVarToken  = "globalvar"  !IdentifierPart
 ForToken        = "for"        !IdentifierPart
 IfToken         = "if"         !IdentifierPart
 ReturnToken     = "return"     !IdentifierPart
+RepeatToken     = "repeat"     !IdentifierPart
 SwitchToken     = "switch"     !IdentifierPart
 TrueToken       = "true"       !IdentifierPart
+UntilToken      = "until"        !IdentifierPart
 VarToken        = "var"        !IdentifierPart
 WhileToken      = "while"      !IdentifierPart
 WithToken       = "with"       !IdentifierPart
@@ -714,6 +727,9 @@ Statement "statement"
   / WithStatement
   / LabelledStatement
   / SwitchStatement
+  / ExitStatement
+  / GlobalVarStatement
+  / RepeatStatement
 
 Block
   = "{" __ body:(StatementList __)? "}" {
@@ -805,7 +821,7 @@ IfStatement
 IterationStatement
   = DoToken __
     body:Statement __
-    WhileToken __ "(" __ test:Expression __ ")" EOS
+    UntilToken __ "(" __ test:Expression __ ")" EOS
     { return { type: "DoWhileStatement", body: body, test: test }; }
   / WhileToken __ "(" __ test:Expression __ ")" __
     body:Statement
@@ -925,6 +941,22 @@ LabelledStatement
   = label:Identifier __ ":" __ body:Statement {
       return { type: "LabeledStatement", label: label, body: body };
     }
+
+ExitStatement
+  = ExitToken EOS { return { type: "ExitStatement" } }
+
+GlobalVarStatement
+  = GlobalVarToken __ declarations:VariableDeclarationList EOS {
+      return {
+        type:         "GlobalVarDeclaration",
+        declarations: declarations
+      };
+    }
+
+RepeatStatement
+  = RepeatToken __ "(" __ times:Expression __ ")" __
+  body:Statement
+    { return { type: "RepeatStatement", times: times, body: body }; }
 
 Program
   = body:SourceElements? {

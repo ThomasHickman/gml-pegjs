@@ -5,13 +5,13 @@ A pegjs parser of GML (GameMaker language), modifies JavaScript peg.js file at [
 
 ## Completed Grammar:
 - Deleted irrelevant JavaScript Grammar
-
-## Grammar to complete:
 - Statements
   * exit
   * globalvar
   * repeat
   * do .. until
+
+## Grammar to complete:
 
 - Expressions
   * mod
