@@ -264,7 +264,7 @@ SignedInteger
   = [+-]? DecimalDigit+
 
 HexIntegerLiteral
-  = "0x"i digits:$HexDigit+ {
+  = ("0x"i / "$") digits:$HexDigit+ {
       return { type: "Literal", value: parseInt(digits, 16) };
      }
 
@@ -517,6 +517,8 @@ MultiplicativeOperator
   = $("*" !"=")
   / $("/" !"=")
   / $("%" !"=")
+  / "mod"
+  / "div"
 
 AdditiveExpression
   = head:MultiplicativeExpression

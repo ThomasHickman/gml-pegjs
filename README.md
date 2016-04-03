@@ -11,12 +11,12 @@ A pegjs parser of GML (GameMaker language), modifies JavaScript peg.js file at [
   * repeat
   * do .. until
 
-## Grammar to complete:
-
 - Expressions
   * mod
   * div
   * hex expressions (with $)
+
+## Grammar to complete:
 
 - Data Structures
   * 2d arrays
