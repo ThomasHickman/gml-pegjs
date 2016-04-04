@@ -23,3 +23,7 @@ ds[@0, 5]
 ds[| 5]
 ds[? "Hi"]
 ds[# 4, 5]
+
+// test bugs
+
+if 2 + 2 == 4 show_message("hello");

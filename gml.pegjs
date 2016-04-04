@@ -1,6 +1,6 @@
 /*
  * Modifed from https://github.com/pegjs/pegjs/blob/0c39f1cf86d73c85a1f832e6cfddf4176f9e58bc/examples/javascript.pegjs
- * By Thomas Hickman 2016
+ * By Thomas Hickman
 */
 
 /*
@@ -659,7 +659,7 @@ AssignmentOperator
   / "^="
   / "|="
 
-Expression
+Expression "expression"
   = head:AssignmentExpression tail:(__ "," __ AssignmentExpression)* {
       return tail.length > 0
         ? { type: "SequenceExpression", expressions: buildList(head, tail, 3) }
@@ -735,7 +735,7 @@ ExpressionStatement
     }
 
 IfStatement
-  = IfToken __ "(" __ test:Expression __ ")" __
+  = IfToken __ test:Expression __
     consequent:Statement __
     ElseToken __
     alternate:Statement
@@ -747,7 +747,7 @@ IfStatement
         alternate:  alternate
       };
     }
-  / IfToken __ "(" __ test:Expression __ ")" __
+  / IfToken __ test:Expression __
     consequent:Statement {
       return {
         type:       "IfStatement",
@@ -760,9 +760,9 @@ IfStatement
 IterationStatement
   = DoToken __
     body:Statement __
-    UntilToken __ "(" __ test:Expression __ ")" EOS
+    UntilToken __  test:Expression  EOS
     { return { type: "DoWhileStatement", body: body, test: test }; }
-  / WhileToken __ "(" __ test:Expression __ ")" __
+  / WhileToken __ test:Expression __
     body:Statement
     { return { type: "WhileStatement", test: test, body: body }; }
   / ForToken __
@@ -826,12 +826,12 @@ ReturnStatement
     }
 
 WithStatement
-  = WithToken __ "(" __ object:Expression __ ")" __
+  = WithToken __ object:Expression __
     body:Statement
     { return { type: "WithStatement", object: object, body: body }; }
 
 SwitchStatement
-  = SwitchToken __ "(" __ discriminant:Expression __ ")" __
+  = SwitchToken __ discriminant:Expression __
     cases:CaseBlock
     {
       return {
@@ -893,7 +893,7 @@ GlobalVarStatement
     }
 
 RepeatStatement
-  = RepeatToken __ "(" __ times:Expression __ ")" __
+  = RepeatToken __ times:Expression __
   body:Statement
     { return { type: "RepeatStatement", times: times, body: body }; }
 
