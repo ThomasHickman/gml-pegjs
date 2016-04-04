@@ -14,3 +14,12 @@ exit;
 5 mod 6
 5 div 6
 $50
+
+// test array syntax
+
+ds[0]
+ds[0, 5]
+ds[@0, 5]
+ds[| 5]
+ds[? "Hi"]
+ds[# 4, 5]

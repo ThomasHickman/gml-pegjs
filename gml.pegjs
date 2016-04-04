@@ -401,12 +401,32 @@ PrimaryExpression
   / Literal
   / "(" __ expression:Expression __ ")" { return expression; }
 
+TupleArgumentList
+  = first:AssignmentExpression __ "," __ second:AssignmentExpression
+  {return [first, second]}
+
+DataStructureAccessor
+  = "[" __ property:(TupleArgumentList / AssignmentExpression) __ "]" {
+      return { property: property, accessorType: "arrayDeepCopy" }
+    }
+  / "[@" __ property:(TupleArgumentList / AssignmentExpression) __ "]" {
+      return { property: property, accessorType: "arrayShallowCopy" }
+    }
+  / "[|" __ property:AssignmentExpression __ "]" {
+      return { property: property, accessorType: "list" }
+    }
+  / "[?" __ property:AssignmentExpression __ "]" {
+      return { property: property, accessorType: "map" }
+    }
+  / "[#" __ property:TupleArgumentList __ "]" {
+      return { property: property, accessorType: "grid" }
+    }
 
 MemberExpression
   = head: PrimaryExpression
     tail:(
-        __ "[" __ property:Expression __ "]" {
-          return { property: property, computed: true };
+        accessor:DataStructureAccessor {
+          return { property: accessor.property, accessorType: accessor.accessorType, computed: true }
         }
       / __ "." __ property:IdentifierName {
           return { property: property, computed: false };
@@ -415,10 +435,11 @@ MemberExpression
     {
       return buildTree(head, tail, function(result, element) {
         return {
-          type:     "MemberExpression",
-          object:   result,
-          property: element.property,
-          computed: element.computed
+          type:         "MemberExpression",
+          object:       result,
+          accessorType: element.accessorType,
+          property:     element.property,
+          computed:     element.computed
         };
       });
     }
@@ -433,11 +454,12 @@ CallExpression
         __ args:Arguments {
           return { type: "CallExpression", arguments: args };
         }
-      / __ "[" __ property:Expression __ "]" {
+      / accessor:DataStructureAccessor {
           return {
-            type:     "MemberExpression",
-            property: property,
-            computed: true
+            type:         "MemberExpression",
+            property:     accessor.property,
+            accessorType: accessor.accessorType,
+            computed:     true
           };
         }
       / __ "." __ property:IdentifierName {
@@ -716,7 +738,7 @@ ExpressionNoIn
 
 /* ----- A.4 Statements ----- */
 
-Statement "statement"
+Statement
   = Block
   / VariableStatement
   / EmptyStatement
