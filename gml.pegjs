@@ -204,7 +204,6 @@ Keyword
   / ElseToken
   / EnumToken
   / ExitToken
-  / FinallyToken
   / ForToken
   / GlobalVarToken
   / IfToken
@@ -358,7 +357,6 @@ ElseToken       = "else"       !IdentifierPart
 ExitToken       = "exit"       !IdentifierPart
 EnumToken       = "enum"       !IdentifierPart
 FalseToken      = "false"      !IdentifierPart
-FinallyToken    = "finally"    !IdentifierPart
 GlobalVarToken  = "globalvar"  !IdentifierPart
 ForToken        = "for"        !IdentifierPart
 IfToken         = "if"         !IdentifierPart
