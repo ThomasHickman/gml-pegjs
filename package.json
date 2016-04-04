@@ -2,7 +2,7 @@
   "name": "gml-pegjs",
   "version": "0.1.0",
   "description": "A gml parser written in pegjs",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "cd test && node test",
     "build": "pegjs gml.pegjs dist/parser.js",
