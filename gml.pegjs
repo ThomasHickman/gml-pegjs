@@ -130,7 +130,7 @@ LineTerminator
   = [\n\r\u2028\u2029]
 
 LineTerminatorSequence "end of line"
-  = "\n"
+= "\n"
   / "\r\n"
   / "\r"
   / "\u2028"
@@ -743,6 +743,7 @@ Statement
   / VariableStatement
   / EmptyStatement
   / ExpressionStatement
+  / DefineStatement
   / IfStatement
   / IterationStatement
   / ContinueStatement
@@ -981,6 +982,11 @@ RepeatStatement
   = RepeatToken __ "(" __ times:Expression __ ")" __
   body:Statement
     { return { type: "RepeatStatement", times: times, body: body }; }
+
+DefineStatement
+ = "#define " script:(!LineTerminator !" " .)* LineTerminatorSequence {
+   return { type: "DefineStatement", script: script }
+ }
 
 Program
   = body:SourceElements? {
