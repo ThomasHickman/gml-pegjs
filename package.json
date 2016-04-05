@@ -1,6 +1,6 @@
 {
   "name": "gml-pegjs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A gml parser written in pegjs",
   "main": "index.js",
   "scripts": {
