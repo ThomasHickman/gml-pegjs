@@ -666,7 +666,7 @@ Expression "expression"
 
 /* ----- A.4 Statements ----- */
 
-Statement
+Statement "statement"
   = Block
   / VariableStatement
   / EmptyStatement
